@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IKEA Compass 🧭</title>
+  <title>IKEA Compass</title>
   
   <style>
     * {
@@ -80,17 +80,41 @@
       justify-content: center;
     }
 
+    .compass-marks {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+    }
+
+    .mark {
+      position: absolute;
+      background: #0058a3;
+      left: 50%;
+      top: 0;
+      transform-origin: center 140px;
+      margin-left: -1px;
+    }
+
+    .mark-major {
+      width: 2px;
+      height: 12px;
+      background: #0058a3;
+    }
+
+    .mark-minor {
+      width: 1px;
+      height: 6px;
+      background: #0058a3;
+      opacity: 0.6;
+    }
+
     .label {
       position: absolute;
       font-size: 1.5rem;
       font-weight: bold;
       color: #0058a3;
     }
-
-    .label-n { top: 20px; }
-    .label-s { bottom: 20px; }
-    .label-e { right: 20px; }
-    .label-w { left: 20px; }
 
     .compass-arrow {
       position: absolute;
@@ -161,18 +185,19 @@
 <body>
 
   <div class="container">
-    <h1>🧭 IKEA Compass</h1>
-    <p class="subtitle">Point to the nearest meatball heaven</p>
+    <h1>IKEA Compass</h1>
+    <!-- <p class="subtitle">Point to the nearest meatball heaven</p> -->
 
     <button class="start-btn" id="startBtn" onclick="startCompass()">TAP TO ACTIVATE</button>
 
     <div class="compass-container" id="compassContainer" style="display: none;">
       <div class="compass-ring"></div>
+      <div class="compass-marks" id="compassMarks"></div>
       <div class="compass-labels">
-        <div class="label label-n">N</div>
-        <div class="label label-s">S</div>
-        <div class="label label-e">E</div>
-        <div class="label label-w">W</div>
+        <div class="label" style="top: 20px;">N</div>
+        <div class="label" style="bottom: 20px;">S</div>
+        <div class="label" style="right: 20px;">E</div>
+        <div class="label" style="left: 20px;">W</div>
       </div>
       <div class="compass-arrow" id="compassArrow"></div>
       <div class="compass-center"></div>
@@ -197,6 +222,25 @@
     let closestStore = null;
     let userLat = 43.5890; // Mississauga
     let userLon = -79.6441;
+
+    function generateCompassMarks() {
+      const marksContainer = document.getElementById('compassMarks');
+      marksContainer.innerHTML = '';
+
+      // Generate marks every 10 degrees, but skip cardinal directions (0, 90, 180, 270)
+      for (let i = 0; i < 360; i += 10) {
+        // Skip N, S, E, W positions
+        if (i % 90 === 0) continue;
+
+        const mark = document.createElement('div');
+        const isMajor = i % 30 === 0; // Major marks every 30 degrees
+        
+        mark.className = isMajor ? 'mark mark-major' : 'mark mark-minor';
+        mark.style.transform = `rotate(${i}deg)`;
+        
+        marksContainer.appendChild(mark);
+      }
+    }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -240,6 +284,7 @@
 
       // Show compass and info
       document.getElementById('compassContainer').style.display = 'flex';
+      generateCompassMarks();
       document.getElementById('info').style.display = 'block';
       document.getElementById('storeName').innerText = closestStore.name;
       document.getElementById('storeDistance').innerText = `📍 ${closestStore.distance.toFixed(1)} km away`;
