@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IKEA Compass</title>
+  <title>IKEA Compass 🧭</title>
   
   <style>
     * {
@@ -133,16 +133,40 @@
       opacity: 0.9;
     }
 
+    .start-btn {
+      background-color: #ffda1a;
+      color: #0058a3;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .start-btn:hover {
+      background-color: #e6c317;
+    }
+
+    .start-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
 
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>IKEA Compass</h1>
-    <!-- <p class="subtitle">Point to the nearest meatball heaven</p> -->
+    <h1>🧭 IKEA Compass</h1>
+    <p class="subtitle">Point to the nearest meatball heaven</p>
 
-    <div class="compass-container" id="compassContainer">
+    <button class="start-btn" id="startBtn" onclick="startCompass()">TAP TO ACTIVATE</button>
+
+    <div class="compass-container" id="compassContainer" style="display: none;">
       <div class="compass-ring"></div>
       <div class="compass-labels">
         <div class="label label-n">N</div>
@@ -197,6 +221,10 @@
     }
 
     function startCompass() {
+      const btn = document.getElementById('startBtn');
+      btn.disabled = true;
+      btn.innerText = "Activating...";
+
       // Find closest IKEA
       let minDistance = Infinity;
       ikeaStores.forEach(store => {
@@ -216,23 +244,29 @@
       document.getElementById('storeName').innerText = closestStore.name;
       document.getElementById('storeDistance').innerText = `📍 ${closestStore.distance.toFixed(1)} km away`;
 
+      btn.style.display = 'none';
+
       // Request device orientation permission
+      console.log("🔍 Requesting orientation permission...");
+      
       if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        console.log("📱 iOS 13+ detected");
         DeviceOrientationEvent.requestPermission()
           .then(response => {
+            console.log("Permission response:", response);
             if (response === 'granted') {
               window.addEventListener('deviceorientation', handleOrientation, true);
               console.log("✅ Compass permission granted!");
             } else {
-              console.log("⚠️ Compass permission denied");
+              console.log("❌ Compass permission denied");
             }
           })
           .catch(err => console.error("Compass error:", err));
       } else {
-        // Android and non-iOS devices
+        console.log("🤖 Android or older iOS");
         window.addEventListener('deviceorientationabsolute', handleOrientation, true);
         window.addEventListener('deviceorientation', handleOrientation, true);
-        console.log("Compass activated");
+        console.log("✅ Compass activated!");
       }
     }
 
@@ -250,9 +284,6 @@
         document.getElementById('compassArrow').style.transform = `rotate(${arrowDegree}deg)`;
       }
     }
-
-    // Auto-start compass on page load
-    window.addEventListener('load', startCompass);
   </script>
 </body>
 </html>
