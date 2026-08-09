@@ -11,8 +11,12 @@
 
 	import data from '$lib/assets/stores.json' with { type: 'json' };
 
-	function handleOrientation(event: DeviceOrientationEvent) {
-		heading = Number(event.alpha);
+	function handleOrientation(event: any) {
+		if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+			heading = Number(event.webkitCompassHeading);
+		} else if (event.absolute && event.alpha !== null) {
+			heading = Number(event.alpha);
+		}
 	}
 
 	onMount(() => {
@@ -68,14 +72,43 @@
 		});
 		return closest_location;
 	}
+
+	async function handleios() {
+		if (
+			typeof DeviceOrientationEvent !== 'undefined' &&
+			typeof DeviceOrientationEvent.requestPermission === 'function'
+		) {
+			try {
+				const permissionState = await DeviceOrientationEvent.requestPermission();
+				if (permissionState === 'granted') {
+					window.addEventListener('deviceorientation', handleOrientation, true);
+					document.getElementById('authButton').style.display = 'none';
+				} else {
+					alert('Permission denied for device orientation.');
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		} else {
+			// Non-iOS or older devices that don't require explicit permission
+			window.addEventListener('deviceorientation', handleOrientation, true);
+			document.getElementById('authButton').style.display = 'none';
+		}
+	}
 </script>
 
 <!-- svelte-ignore a11y_missing_attribute -->
-<img class="box mx-auto my-12" style:--angle="{rotation + 90}deg" src={blahaj} />
+<img class="box mx-auto my-24" style:--angle="{rotation + 90}deg" src={blahaj} />
+
+{#if typeof DeviceOrientationEvent === 'undefined'}
+	<div class="grid place-items-center">
+		<button id="authButton" class="btn btn-xl" onclick={handleios}>Enable Compass</button>
+	</div>
+{/if}
 
 <style>
 	.box {
 		transform: rotate(var(--angle));
-		transition: transform 0.3s ease;
+		/* transition: transform 0.3s ease; */
 	}
 </style>
