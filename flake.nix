@@ -14,13 +14,13 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
-          nodejs_26
+          nodejs_24
           vitejs
           pnpm
         ];
         shellHook = ''
           pnpm install
-          pnpm run dev
+          pnpm run preview
         '';
       };
     };

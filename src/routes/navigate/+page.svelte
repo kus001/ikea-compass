@@ -1,17 +1,23 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	import blahaj from '$lib/assets/blahaj.png';
 	import { calculateDistance, calculateBearing } from '$lib/math.ts';
 
-	let rotation = $state(0);
-
-	let lnglat: [number, number] = [
-		Number(page.url.searchParams.get('long')),
-		Number(page.url.searchParams.get('lat'))
-	];
+	let heading = $state(0);
+	let bearing = $state(0);
+	let rotation = $derived(bearing - heading);
 
 	import data from '$lib/assets/stores.json' with { type: 'json' };
+
+	function handleOrientation(event: DeviceOrientationEvent) {
+		heading = Number(event.alpha);
+	}
+
+	onMount(() => {
+		window.addEventListener('deviceorientationabsolute', handleOrientation);
+	});
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition((position) => {
@@ -20,9 +26,17 @@
 				Number(position.coords.latitude)
 			];
 
-			let closest_location = closest_ikea(lnglat[1], lnglat[0]);
+			// console.log(
+			// 	Number(page.url.searchParams.get('lat')),
+			// 	Number(page.url.searchParams.get('long'))
+			// );
 
-			let bearing = calculateBearing(
+			let closest_location = closest_ikea(
+				Number(page.url.searchParams.get('lat')),
+				Number(page.url.searchParams.get('long'))
+			);
+
+			bearing = calculateBearing(
 				lnglat_user[1],
 				lnglat_user[0],
 				Number(closest_location.latitude),
@@ -37,10 +51,6 @@
 			// 	closest_location.name,
 			// 	bearing
 			// );
-
-			var heading = 0;
-
-			rotation = bearing - heading;
 		});
 	} else {
 		console.log('Geolocation not supported');
