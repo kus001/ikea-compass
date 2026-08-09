@@ -8,7 +8,8 @@
 		GlobeControl
 	} from 'svelte-maplibre-gl';
 
-	let lnglat: [number, number] = $state([-73.2182, 44.4735]);
+	// svelte-ignore non_reactive_update
+	let lnglat: [number, number] = [-79.3867, 43.6556];
 
 	function navigate() {
 		const searchParams = new URLSearchParams();
@@ -31,5 +32,5 @@
 	<Marker bind:lnglat draggable />
 </MapLibre>
 <button class="btn mx-8 h-[5vh] w-[calc(100%-4rem)] rounded-md btn-primary" onclick={navigate}
-	>Directions</button
+	>Normal Directions</button
 >

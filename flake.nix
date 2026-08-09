@@ -20,7 +20,7 @@
         ];
         shellHook = ''
           pnpm install
-          pnpm run preview
+          pnpm run dev
         '';
       };
     };
