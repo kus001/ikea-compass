@@ -100,11 +100,9 @@
 <!-- svelte-ignore a11y_missing_attribute -->
 <img class="box mx-auto my-24" style:--angle="{rotation + 90}deg" src={blahaj} />
 
-{#if typeof DeviceOrientationEvent === 'undefined'}
-	<div class="grid place-items-center">
-		<button id="authButton" class="btn btn-xl" onclick={handleios}>Enable Compass</button>
-	</div>
-{/if}
+<div class="grid place-items-center">
+	<button id="authButton" class="btn btn-xl" onclick={handleios}>Enable Compass</button>
+</div>
 
 <style>
 	.box {
