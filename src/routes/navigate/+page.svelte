@@ -7,7 +7,7 @@
 
 	let heading = $state(0);
 	let bearing = $state(0);
-	let rotation = $derived(bearing + heading);
+	let rotation = $derived(bearing - heading);
 
 	import data from '$lib/assets/stores.json' with { type: 'json' };
 
@@ -15,7 +15,7 @@
 		if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
 			heading = Number(event.webkitCompassHeading);
 		} else if (event.absolute && event.alpha !== null) {
-			heading = Number(event.alpha);
+			heading = 360 - Number(event.alpha);
 		}
 	}
 
