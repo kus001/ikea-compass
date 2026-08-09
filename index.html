@@ -1,334 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IKEA Compass</title>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>IKEA Compass</title>
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0058a3 0%, #003d7a 100%);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-    .container {
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-    }
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: linear-gradient(135deg, #0058a3 0%, #003d7a 100%);
+				color: #fff;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				padding: 20px;
+			}
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+			.container {
+				text-align: center;
+				max-width: 500px;
+				width: 100%;
+			}
 
-    .subtitle {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-bottom: 40px;
-    }
+			h1 {
+				font-size: 2.5rem;
+				margin-bottom: 10px;
+			}
 
-    .compass-container {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      margin: 0 auto 30px;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+			.subtitle {
+				font-size: 1.1rem;
+				opacity: 0.9;
+				margin-bottom: 40px;
+			}
 
-    .compass-circle {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+			.compass-container {
+				position: relative;
+				width: 300px;
+				height: 300px;
+				margin: 0 auto 30px;
+				background: #fff;
+				border-radius: 50%;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-    .compass-ring {
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border: 3px solid #0058a3;
-      border-radius: 50%;
-    }
+			.compass-circle {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-    .compass-labels {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+			.compass-ring {
+				position: absolute;
+				width: 280px;
+				height: 280px;
+				border: 3px solid #0058a3;
+				border-radius: 50%;
+			}
 
-    .compass-marks {
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-    }
+			.compass-labels {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-    .mark {
-      position: absolute;
-      background: #0058a3;
-      left: 50%;
-      top: 0;
-      transform-origin: center 140px;
-      margin-left: -1px;
-    }
+			.compass-marks {
+				position: absolute;
+				width: 280px;
+				height: 280px;
+				border-radius: 50%;
+			}
 
-    .mark-major {
-      width: 2px;
-      height: 12px;
-      background: #0058a3;
-    }
+			.mark {
+				position: absolute;
+				background: #0058a3;
+				left: 50%;
+				top: 0;
+				transform-origin: center 140px;
+				margin-left: -1px;
+			}
 
-    .mark-minor {
-      width: 1px;
-      height: 6px;
-      background: #0058a3;
-      opacity: 0.6;
-    }
+			.mark-major {
+				width: 2px;
+				height: 12px;
+				background: #0058a3;
+			}
 
-    .label {
-      position: absolute;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #0058a3;
-    }
+			.mark-minor {
+				width: 1px;
+				height: 6px;
+				background: #0058a3;
+				opacity: 0.6;
+			}
 
-    .compass-arrow {
-      position: absolute;
-      width: 8px;
-      height: 120px;
-      background: linear-gradient(to top, #cc0000 0%, #ff6666 100%);
-      bottom: 50%;
-      border-radius: 4px;
-      transform-origin: bottom center;
-      z-index: 10;
-      box-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
-      transition: transform 0.1s ease-out;
-    }
+			.label {
+				position: absolute;
+				font-size: 1.5rem;
+				font-weight: bold;
+				color: #0058a3;
+			}
 
-    .compass-center {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background: #0058a3;
-      border-radius: 50%;
-      z-index: 20;
-    }
+			.compass-arrow {
+				position: absolute;
+				width: 8px;
+				height: 120px;
+				background: linear-gradient(to top, #cc0000 0%, #ff6666 100%);
+				bottom: 50%;
+				border-radius: 4px;
+				transform-origin: bottom center;
+				z-index: 10;
+				box-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
+				transition: transform 0.1s ease-out;
+			}
 
-    .info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 20px;
-      backdrop-filter: blur(10px);
-    }
+			.compass-center {
+				position: absolute;
+				width: 30px;
+				height: 30px;
+				background: #0058a3;
+				border-radius: 50%;
+				z-index: 20;
+			}
 
-    .store-name {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+			.info {
+				background: rgba(255, 255, 255, 0.1);
+				padding: 20px;
+				border-radius: 12px;
+				margin-top: 20px;
+				backdrop-filter: blur(10px);
+			}
 
-    .distance {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
+			.store-name {
+				font-size: 1.5rem;
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
 
-    .start-btn {
-      background-color: #ffda1a;
-      color: #0058a3;
-      border: none;
-      padding: 15px 40px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background-color 0.3s;
-    }
+			.distance {
+				font-size: 1.2rem;
+				opacity: 0.9;
+			}
 
-    .start-btn:hover {
-      background-color: #e6c317;
-    }
+			.start-btn {
+				background-color: #ffda1a;
+				color: #0058a3;
+				border: none;
+				padding: 15px 40px;
+				font-size: 1.1rem;
+				font-weight: bold;
+				border-radius: 8px;
+				cursor: pointer;
+				margin-top: 20px;
+				transition: background-color 0.3s;
+			}
 
-    .start-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+			.start-btn:hover {
+				background-color: #e6c317;
+			}
 
+			.start-btn:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>IKEA Compass</h1>
+			<!-- <p class="subtitle">Point to the nearest meatball heaven</p> -->
 
-  </style>
-</head>
-<body>
+			<button class="start-btn" id="startBtn" onclick="startCompass()">TAP TO ACTIVATE</button>
 
-  <div class="container">
-    <h1>IKEA Compass</h1>
-    <!-- <p class="subtitle">Point to the nearest meatball heaven</p> -->
+			<div class="compass-container" id="compassContainer" style="display: none">
+				<div class="compass-ring"></div>
+				<div class="compass-marks" id="compassMarks"></div>
+				<div class="compass-labels">
+					<div class="label" style="top: 20px">N</div>
+					<div class="label" style="bottom: 20px">S</div>
+					<div class="label" style="right: 20px">E</div>
+					<div class="label" style="left: 20px">W</div>
+				</div>
+				<div class="compass-arrow" id="compassArrow"></div>
+				<div class="compass-center"></div>
+			</div>
 
-    <button class="start-btn" id="startBtn" onclick="startCompass()">TAP TO ACTIVATE</button>
+			<div class="info" id="info" style="display: none">
+				<div class="store-name" id="storeName"></div>
+				<div class="distance" id="storeDistance"></div>
+			</div>
+		</div>
 
-    <div class="compass-container" id="compassContainer" style="display: none;">
-      <div class="compass-ring"></div>
-      <div class="compass-marks" id="compassMarks"></div>
-      <div class="compass-labels">
-        <div class="label" style="top: 20px;">N</div>
-        <div class="label" style="bottom: 20px;">S</div>
-        <div class="label" style="right: 20px;">E</div>
-        <div class="label" style="left: 20px;">W</div>
-      </div>
-      <div class="compass-arrow" id="compassArrow"></div>
-      <div class="compass-center"></div>
-    </div>
+		<script>
+			const ikeaStores = [
+				{ name: 'IKEA Downtown Toronto', lat: 43.677007, lon: -79.384942 },
+				{ name: 'IKEA North York', lat: 43.800863, lon: -79.367466 },
+				{ name: 'IKEA Vaughan', lat: 43.797286, lon: -79.533468 },
+				{ name: 'IKEA Etobicoke', lat: 43.632531, lon: -79.548334 },
+				{ name: 'IKEA Burlington', lat: 43.346227, lon: -79.823796 }
+			];
 
-    <div class="info" id="info" style="display: none;">
-      <div class="store-name" id="storeName"></div>
-      <div class="distance" id="storeDistance"></div>
-    </div>
-  </div>
+			let targetBearing = 0;
+			let closestStore = null;
+			let userLat = 43.589; // Mississauga
+			let userLon = -79.6441;
 
-  <script>
-    const ikeaStores = [
-      { name: "IKEA Downtown Toronto", lat: 43.677007, lon: -79.384942 },
-      { name: "IKEA North York", lat: 43.800863, lon: -79.367466 },
-      { name: "IKEA Vaughan", lat: 43.797286, lon: -79.533468 },
-      { name: "IKEA Etobicoke", lat: 43.632531, lon: -79.548334 },
-      { name: "IKEA Burlington", lat: 43.346227, lon: -79.823796 }
-    ];
+			function generateCompassMarks() {
+				const marksContainer = document.getElementById('compassMarks');
+				marksContainer.innerHTML = '';
 
-    let targetBearing = 0;
-    let closestStore = null;
-    let userLat = 43.5890; // Mississauga
-    let userLon = -79.6441;
+				// Generate marks every 10 degrees, but skip cardinal directions (0, 90, 180, 270)
+				for (let i = 0; i < 360; i += 10) {
+					// Skip N, S, E, W positions
+					if (i % 90 === 0) continue;
 
-    function generateCompassMarks() {
-      const marksContainer = document.getElementById('compassMarks');
-      marksContainer.innerHTML = '';
+					const mark = document.createElement('div');
+					const isMajor = i % 30 === 0; // Major marks every 30 degrees
 
-      // Generate marks every 10 degrees, but skip cardinal directions (0, 90, 180, 270)
-      for (let i = 0; i < 360; i += 10) {
-        // Skip N, S, E, W positions
-        if (i % 90 === 0) continue;
+					mark.className = isMajor ? 'mark mark-major' : 'mark mark-minor';
+					mark.style.transform = `rotate(${i}deg)`;
 
-        const mark = document.createElement('div');
-        const isMajor = i % 30 === 0; // Major marks every 30 degrees
-        
-        mark.className = isMajor ? 'mark mark-major' : 'mark mark-minor';
-        mark.style.transform = `rotate(${i}deg)`;
-        
-        marksContainer.appendChild(mark);
-      }
-    }
+					marksContainer.appendChild(mark);
+				}
+			}
 
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * (Math.PI / 180);
-      const dLon = (lon2 - lon1) * (Math.PI / 180);
-      const a = 
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); 
-    }
+			function calculateDistance(lat1, lon1, lat2, lon2) {
+				const R = 6371;
+				const dLat = (lat2 - lat1) * (Math.PI / 180);
+				const dLon = (lon2 - lon1) * (Math.PI / 180);
+				const a =
+					Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+					Math.cos(lat1 * (Math.PI / 180)) *
+						Math.cos(lat2 * (Math.PI / 180)) *
+						Math.sin(dLon / 2) *
+						Math.sin(dLon / 2);
+				return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+			}
 
-    function calculateBearing(lat1, lon1, lat2, lon2) {
-      const toRad = deg => deg * (Math.PI / 180);
-      const toDeg = rad => rad * (180 / Math.PI);
+			function calculateBearing(lat1, lon1, lat2, lon2) {
+				const toRad = (deg) => deg * (Math.PI / 180);
+				const toDeg = (rad) => rad * (180 / Math.PI);
 
-      const dLon = toRad(lon2 - lon1);
-      const y = Math.sin(dLon) * Math.cos(toRad(lat2));
-      const x = Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
-                Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
+				const dLon = toRad(lon2 - lon1);
+				const y = Math.sin(dLon) * Math.cos(toRad(lat2));
+				const x =
+					Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+					Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
 
-      return (toDeg(Math.atan2(y, x)) + 360) % 360;
-    }
+				return (toDeg(Math.atan2(y, x)) + 360) % 360;
+			}
 
-    function startCompass() {
-      const btn = document.getElementById('startBtn');
-      btn.disabled = true;
-      btn.innerText = "Activating...";
+			function startCompass() {
+				const btn = document.getElementById('startBtn');
+				btn.disabled = true;
+				btn.innerText = 'Activating...';
 
-      // Find closest IKEA
-      let minDistance = Infinity;
-      ikeaStores.forEach(store => {
-        const dist = calculateDistance(userLat, userLon, store.lat, store.lon);
-        if (dist < minDistance) {
-          minDistance = dist;
-          closestStore = { ...store, distance: dist };
-        }
-      });
+				// Find closest IKEA
+				let minDistance = Infinity;
+				ikeaStores.forEach((store) => {
+					const dist = calculateDistance(userLat, userLon, store.lat, store.lon);
+					if (dist < minDistance) {
+						minDistance = dist;
+						closestStore = { ...store, distance: dist };
+					}
+				});
 
-      // Calculate bearing to closest store
-      targetBearing = calculateBearing(userLat, userLon, closestStore.lat, closestStore.lon);
+				// Calculate bearing to closest store
+				targetBearing = calculateBearing(userLat, userLon, closestStore.lat, closestStore.lon);
 
-      // Show compass and info
-      document.getElementById('compassContainer').style.display = 'flex';
-      generateCompassMarks();
-      document.getElementById('info').style.display = 'block';
-      document.getElementById('storeName').innerText = closestStore.name;
-      document.getElementById('storeDistance').innerText = `📍 ${closestStore.distance.toFixed(1)} km away`;
+				// Show compass and info
+				document.getElementById('compassContainer').style.display = 'flex';
+				generateCompassMarks();
+				document.getElementById('info').style.display = 'block';
+				document.getElementById('storeName').innerText = closestStore.name;
+				document.getElementById('storeDistance').innerText =
+					`📍 ${closestStore.distance.toFixed(1)} km away`;
 
-      btn.style.display = 'none';
+				btn.style.display = 'none';
 
-      // Request device orientation permission
-      console.log("🔍 Requesting orientation permission...");
-      
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        console.log("📱 iOS 13+ detected");
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            console.log("Permission response:", response);
-            if (response === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation, true);
-              console.log("✅ Compass permission granted!");
-            } else {
-              console.log("❌ Compass permission denied");
-            }
-          })
-          .catch(err => console.error("Compass error:", err));
-      } else {
-        console.log("🤖 Android or older iOS");
-        window.addEventListener('deviceorientationabsolute', handleOrientation, true);
-        window.addEventListener('deviceorientation', handleOrientation, true);
-        console.log("✅ Compass activated!");
-      }
-    }
+				// Request device orientation permission
+				console.log('🔍 Requesting orientation permission...');
 
-    function handleOrientation(event) {
-      let compassHeading = null;
+				if (
+					typeof DeviceOrientationEvent !== 'undefined' &&
+					typeof DeviceOrientationEvent.requestPermission === 'function'
+				) {
+					console.log('📱 iOS 13+ detected');
+					DeviceOrientationEvent.requestPermission()
+						.then((response) => {
+							console.log('Permission response:', response);
+							if (response === 'granted') {
+								window.addEventListener('deviceorientation', handleOrientation, true);
+								console.log('✅ Compass permission granted!');
+							} else {
+								console.log('❌ Compass permission denied');
+							}
+						})
+						.catch((err) => console.error('Compass error:', err));
+				} else {
+					console.log('🤖 Android or older iOS');
+					window.addEventListener('deviceorientationabsolute', handleOrientation, true);
+					window.addEventListener('deviceorientation', handleOrientation, true);
+					console.log('✅ Compass activated!');
+				}
+			}
 
-      if (event.webkitCompassHeading) {
-        compassHeading = event.webkitCompassHeading;
-      } else if (event.alpha !== null) {
-        compassHeading = 360 - event.alpha;
-      }
+			function handleOrientation(event) {
+				let compassHeading = null;
 
-      if (compassHeading !== null) {
-        const arrowDegree = targetBearing - compassHeading;
-        document.getElementById('compassArrow').style.transform = `rotate(${arrowDegree}deg)`;
-      }
-    }
-  </script>
-</body>
+				if (event.webkitCompassHeading) {
+					compassHeading = event.webkitCompassHeading;
+				} else if (event.alpha !== null) {
+					compassHeading = 360 - event.alpha;
+				}
+
+				if (compassHeading !== null) {
+					const arrowDegree = targetBearing - compassHeading;
+					document.getElementById('compassArrow').style.transform = `rotate(${arrowDegree}deg)`;
+				}
+			}
+		</script>
+	</body>
 </html>
