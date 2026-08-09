@@ -7,7 +7,7 @@
 
 	let heading = $state(0);
 	let bearing = $state(0);
-	let rotation = $derived(bearing - heading);
+	let rotation = $derived(bearing + heading);
 
 	import data from '$lib/assets/stores.json' with { type: 'json' };
 
